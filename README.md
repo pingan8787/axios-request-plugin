@@ -1,7 +1,7 @@
 # axios-request-plugin
 
 ## 插件介绍
-axios-request-plugin 插件是用来最 [Axios]() 请求做处理的工具。其特点包括：
+axios-request-plugin 插件是用来最 [Axios](https://github.com/axios/axios) 请求做处理的工具。其特点包括：
 1. 提供多个适配器和拦截器，开发者可以自行根据业务选择；
 2. 每个适配器和拦截器互不影响，可随意组合使用；
 

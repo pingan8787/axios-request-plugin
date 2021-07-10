@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script src="./axios-request-plugin.umd.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <div>
+        <h2>1.取消请求</h2>
+        <button id="cancelRequest">取消请求</button>
+        <h2>2.缓存请求数据（适配器）</h2>
+        <button id="useCacheRequest">使用缓存请求</button>
+        <button id="useNoCacheRequest">不使用缓存请求</button>
+        <h2>3.缓存请求数据（拦截器）</h2>
+        <button id="useCacheInterceptorRequest">使用缓存请求</button>
+    </div>
+
+    <script>
+        // 配置 axios
+        const { install, interceptors, adapters } = window.axiosRequestPlugin;
+        const requestConfig = {
+            baseURL: "http://localhost:1000",
+            adapter: adapters.cacheAdapterEnhancer(axios.defaults.adapter, {
+                enabledByDefault: false, // 默认禁用缓存
+                maxAge: 5000, // 缓存时间为5s
+            })
+        }
+
+        let request = axios.create(requestConfig);
+
+        request = install.installInterceptors(request, [interceptors.CancelRequestInterceptor]);
+
+        // 处理 DOM 相关内容
+        const buttonList = ["cancelRequest", "useCacheRequest", "useNoCacheRequest", "useCacheInterceptorRequest"];
+
+        const eventObj = {
+            async cancelRequest() {
+                const res = await request("/hello");
+                console.log("cancelRequest:", res);
+            },
+            async useCacheRequest() {
+                const res = await request("/hello", { cache: true });
+                console.log("useCacheRequest:", res);
+            },
+            async useNoCacheRequest() {
+                const res = await request("/hello", { cache: false });
+                console.log("useNoCacheRequest:", res);
+            },
+            async useCacheInterceptorRequest() {
+                const res = await request("/hello");
+                console.log("useCacheInterceptorRequest:", res);
+            }
+        }
+
+        const bindEvent = () => {
+            buttonList.forEach(button => {
+                const elem = document.getElementById(button);
+                elem.addEventListener('click', eventObj[button]);
+            })
+        }
+
+        bindEvent();
+    </script>
+</body>
+
+</html>
