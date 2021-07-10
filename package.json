@@ -1,0 +1,29 @@
+{
+  "name": "axios-request-plugin",
+  "version": "1.0.0",
+  "description": "axios request",
+  "main": "index.js",
+  "directories": {},
+  "scripts": {
+    "dev": "rollup -c --watch",
+    "build": "rollup -c"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pingan8787/axios-request-plugin.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pingan8787/axios-request-plugin/issues"
+  },
+  "homepage": "https://github.com/pingan8787/axios-request-plugin#readme",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^19.0.0",
+    "@rollup/plugin-node-resolve": "^13.0.0",
+    "rollup": "^2.53.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-serve": "^1.1.0",
+    "rollup-plugin-terser": "^7.0.2"
+  }
+}

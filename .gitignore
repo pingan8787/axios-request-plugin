@@ -1,3 +1,6 @@
+# 当前项目配置
+.DS_Store
+
 # Logs
 logs
 *.log
