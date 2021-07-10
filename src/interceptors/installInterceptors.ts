@@ -1,5 +1,5 @@
 import CancelRequestInterceptor from './cancelRequest';
-import HandleRequestInterceptor from './cancelRequest';
+import HandleRequestInterceptor from './handlerRequest';
 
 const interceptors = [
     HandleRequestInterceptor,

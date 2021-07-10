@@ -26,7 +26,7 @@
         const { install, interceptors, adapters } = window.axiosRequestPlugin;
         const requestConfig = {
             baseURL: "http://localhost:1000",
-            adapter: adapters.cacheAdapterEnhancer(axios.defaults.adapter, {
+            adapter: adapters.cacheRequestAdapter(axios.defaults.adapter, {
                 enabledByDefault: false, // 默认禁用缓存
                 maxAge: 5000, // 缓存时间为5s
             })

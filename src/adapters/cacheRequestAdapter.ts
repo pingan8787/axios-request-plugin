@@ -9,7 +9,7 @@ options：缓存配置对象，该对象支持 4 个属性，分别用于配置�
     cacheFlag：缓存标志，用于配置请求 config 对象上的缓存属性；
     defaultCache：用于设置使用的缓存对象。
 */
-export const cacheAdapterEnhancer = (adapter, options) => {
+export const cacheRequestAdapter = (adapter, options) => {
     const { maxAge,
         enabledByDefault = true,
         cacheFlag = "cache",
@@ -17,7 +17,7 @@ export const cacheAdapterEnhancer = (adapter, options) => {
     } = options;
     return config => {
         const { url, method = "", params, forceUpdate } = config;
-        let useCache = config[cacheFlag] !== undefined & config[cacheFlag] !== null
+        let useCache = config[cacheFlag] !== undefined && config[cacheFlag] !== null
             ? config[cacheFlag]
             : enabledByDefault;
 
