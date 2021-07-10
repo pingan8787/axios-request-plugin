@@ -1,9 +1,11 @@
-import CancelRequestInterceptor from './cancelRequest';
-import HandleRequestInterceptor from './handlerRequest';
+import { AxiosStatic } from 'axios';
+import { Interceptor } from '../interface/interceptors';
+import cancelRequestInterceptor from './cancelRequest';
+import handleRequestInterceptor from './handlerRequest';
 
-const interceptors = [
-    HandleRequestInterceptor,
-    CancelRequestInterceptor
+const defaultInterceptors: Interceptor[] = [
+    handleRequestInterceptor,
+    cancelRequestInterceptor
 ]
 
 const toArray = target => {
@@ -20,7 +22,7 @@ const toArray = target => {
 }
 
 // 手动装载拦截器列表
-export const installInterceptors = (axios, interceptors) => {
+export const installInterceptors = (axios: AxiosStatic, interceptors:Interceptor[]): AxiosStatic => {
     if(!axios) return;
     interceptors = toArray(interceptors);
     if(interceptors && interceptors.length > 0){
@@ -34,7 +36,7 @@ export const installInterceptors = (axios, interceptors) => {
 }
 
 // 自动装载所有拦截器
-export const bootstrapInstallInterceptors = (axios) => {
+export const bootstrapInstallInterceptors = (axios: AxiosStatic): AxiosStatic => {
     if(!axios) return;
-    return installInterceptors(axios, interceptors);
+    return installInterceptors(axios, defaultInterceptors);
 }

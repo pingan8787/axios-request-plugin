@@ -64,7 +64,7 @@
             return Promise.reject(error);
         }
     };
-    var CancelRequestInterceptor = {
+    var cancelRequestInterceptor = {
         request: requestInterceptors$1,
         response: responseInterceptors$1
     };
@@ -85,14 +85,14 @@
             return Promise.reject(error);
         }
     };
-    var HandleRequestInterceptor = {
+    var handleRequestInterceptor = {
         request: requestInterceptors,
         response: responseInterceptors
     };
 
-    var interceptors = [
-        HandleRequestInterceptor,
-        CancelRequestInterceptor
+    var defaultInterceptors = [
+        handleRequestInterceptor,
+        cancelRequestInterceptor
     ];
     var toArray = function (target) {
         var type = typeof target;
@@ -125,7 +125,7 @@
     var bootstrapInstallInterceptors = function (axios) {
         if (!axios)
             return;
-        return installInterceptors(axios, interceptors);
+        return installInterceptors(axios, defaultInterceptors);
     };
 
     /*! *****************************************************************************
@@ -255,7 +255,7 @@
 
     var index = {
         interceptors: {
-            CancelRequestInterceptor: CancelRequestInterceptor
+            cancelRequestInterceptor: cancelRequestInterceptor
         },
         adapters: {
             cacheRequestAdapter: cacheRequestAdapter

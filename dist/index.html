@@ -34,7 +34,7 @@
 
         let request = axios.create(requestConfig);
 
-        request = install.installInterceptors(request, [interceptors.CancelRequestInterceptor]);
+        request = install.installInterceptors(request, [interceptors.cancelRequestInterceptor]);
 
         // 处理 DOM 相关内容
         const buttonList = ["cancelRequest", "useCacheRequest", "useNoCacheRequest", "useCacheInterceptorRequest"];
