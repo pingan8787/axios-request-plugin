@@ -208,12 +208,14 @@
     };
 
     /*
-    adapter：预增强的 Axios 适配器对象；
-    options：缓存配置对象，该对象支持 4 个属性，分别用于配置不同的功能：
-        maxAge：全局设置缓存的最大时间；
-        enabledByDefault：是否启用缓存，默认为 true；
-        cacheFlag：缓存标志，用于配置请求 config 对象上的缓存属性；
-        defaultCache：用于设置使用的缓存对象。
+        请求缓存适配器
+        
+        adapter：预增强的 Axios 适配器对象；
+        options：缓存配置对象，该对象支持 4 个属性，分别用于配置不同的功能：
+        options.maxAge：全局设置缓存的最大时间；
+        options.enabledByDefault：是否启用缓存，默认为 true；
+        options.cacheFlag：缓存标志，用于配置请求 config 对象上的缓存属性；
+        options.defaultCache：用于设置使用的缓存对象。
     */
     var cacheRequestAdapter = function (adapter, options) {
         var maxAge = options.maxAge, _a = options.enabledByDefault, enabledByDefault = _a === void 0 ? true : _a, _b = options.cacheFlag, cacheFlag = _b === void 0 ? "cache" : _b, _c = options.defaultCache, defaultCache = _c === void 0 ? MemoryCache : _c;
@@ -253,12 +255,58 @@
         };
     };
 
+    /*
+        重试请求适配器增强
+        
+        adapter：预增强的 Axios 适配器对象；
+        options：缓存配置对象，该对象支持 4 个属性，分别用于配置不同的功能：
+        options.times：全局设置请求重试的次数；
+        options.delay：全局设置请求延迟的时间，单位是 ms。
+    */
+    var retryRequestAdapter = function (adapter, options) {
+        var _a = options.times, times = _a === void 0 ? 0 : _a, _b = options.delay, delay = _b === void 0 ? 300 : _b;
+        return function (config) {
+            var _a = config.retryTimes, retryTimes = _a === void 0 ? times : _a, _b = config.retryDelay, retryDelay = _b === void 0 ? delay : _b;
+            var __retryCount = 0;
+            var request = function () { return __awaiter(void 0, void 0, void 0, function () {
+                var error_1, delay_1;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            _a.trys.push([0, 2, , 3]);
+                            return [4 /*yield*/, adapter(config)];
+                        case 1: return [2 /*return*/, _a.sent()];
+                        case 2:
+                            error_1 = _a.sent();
+                            // 1. 判断是否进行重试
+                            if (!retryTimes || __retryCount >= retryTimes) {
+                                return [2 /*return*/, Promise.reject(error_1)];
+                            }
+                            __retryCount++; // 增加重试次数
+                            delay_1 = new Promise(function (resolve) {
+                                setTimeout(function () {
+                                    resolve();
+                                }, retryDelay);
+                            });
+                            // 3. 重新发送请求
+                            return [2 /*return*/, delay_1.then(function () {
+                                    return request();
+                                })];
+                        case 3: return [2 /*return*/];
+                    }
+                });
+            }); };
+            return request();
+        };
+    };
+
     var index = {
         interceptors: {
             cancelRequestInterceptor: cancelRequestInterceptor
         },
         adapters: {
-            cacheRequestAdapter: cacheRequestAdapter
+            cacheRequestAdapter: cacheRequestAdapter,
+            retryRequestAdapter: retryRequestAdapter
         },
         install: {
             installInterceptors: installInterceptors,

@@ -19,6 +19,8 @@
         <button id="useNoCacheRequest">不使用缓存请求</button>
         <h2>3.缓存请求数据（拦截器）</h2>
         <button id="useCacheInterceptorRequest">使用缓存请求</button>
+        <h2>4.请求重试（适配器）</h2>
+        <button id="useRetryRequestAdapter">使用适配器</button>
     </div>
 
     <script>
@@ -26,9 +28,12 @@
         const { install, interceptors, adapters } = window.axiosRequestPlugin;
         const requestConfig = {
             baseURL: "http://localhost:1000",
-            adapter: adapters.cacheRequestAdapter(axios.defaults.adapter, {
-                enabledByDefault: false, // 默认禁用缓存
-                maxAge: 5000, // 缓存时间为5s
+            // adapter: adapters.cacheRequestAdapter(axios.defaults.adapter, {
+            //     enabledByDefault: false, // 默认禁用缓存
+            //     maxAge: 5000, // 缓存时间为5s
+            // }),
+            adapter: adapters.retryRequestAdapter(axios.defaults.adapter, {
+                retryDelay: 1000,
             })
         }
 
@@ -37,7 +42,7 @@
         request = install.installInterceptors(request, [interceptors.cancelRequestInterceptor]);
 
         // 处理 DOM 相关内容
-        const buttonList = ["cancelRequest", "useCacheRequest", "useNoCacheRequest", "useCacheInterceptorRequest"];
+        const buttonList = ["cancelRequest", "useCacheRequest", "useNoCacheRequest", "useCacheInterceptorRequest", "useRetryRequestAdapter"];
 
         const eventObj = {
             async cancelRequest() {
@@ -55,6 +60,10 @@
             async useCacheInterceptorRequest() {
                 const res = await request("/hello");
                 console.log("useCacheInterceptorRequest:", res);
+            },
+            async useRetryRequestAdapter() {
+                const res = await request("/hello", { retryTimes: 2 });
+                console.log("useRetryRequestAdapter:", res);
             }
         }
 

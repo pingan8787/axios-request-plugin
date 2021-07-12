@@ -2,13 +2,15 @@ import { installInterceptors, bootstrapInstallInterceptors } from './interceptor
 import cancelRequestInterceptor from './interceptors/cancelRequest';
 
 import { cacheRequestAdapter } from './adapters/cacheRequestAdapter';
+import { retryRequestAdapter } from './adapters/retryRequestAdapter';
 
 export default {
     interceptors: {
         cancelRequestInterceptor
     },
     adapters: {
-        cacheRequestAdapter
+        cacheRequestAdapter,
+        retryRequestAdapter
     },
     install:{
         installInterceptors,

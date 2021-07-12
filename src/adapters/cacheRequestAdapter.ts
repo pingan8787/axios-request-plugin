@@ -2,12 +2,14 @@ import { generateReqKey, isCacheLike } from '../utils/index';
 import { MemoryCache } from '../utils/memoryCache';
 
 /*
-adapter：预增强的 Axios 适配器对象；
-options：缓存配置对象，该对象支持 4 个属性，分别用于配置不同的功能：
-    maxAge：全局设置缓存的最大时间；
-    enabledByDefault：是否启用缓存，默认为 true；
-    cacheFlag：缓存标志，用于配置请求 config 对象上的缓存属性；
-    defaultCache：用于设置使用的缓存对象。
+    请求缓存适配器
+    
+    adapter：预增强的 Axios 适配器对象；
+    options：缓存配置对象，该对象支持 4 个属性，分别用于配置不同的功能：
+    options.maxAge：全局设置缓存的最大时间；
+    options.enabledByDefault：是否启用缓存，默认为 true；
+    options.cacheFlag：缓存标志，用于配置请求 config 对象上的缓存属性；
+    options.defaultCache：用于设置使用的缓存对象。
 */
 export const cacheRequestAdapter = (adapter, options) => {
     const { maxAge,
